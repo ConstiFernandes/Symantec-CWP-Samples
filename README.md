@@ -8,10 +8,15 @@ You can also buy Cloud Workload protection from Amazon AWS Market Place that als
 After you have activated your account, completed AWS, Azure or Google Cloud Connection; deployed CWP agent on our cloud instances, you are ready to start using these samples
 
 1. First step is to Create API access keys. After login to CWP console, go to 'Settings' page and click on 'API Keys' tab
+
 2. Copy following API secret keys and your CWP tenant ID information and keep themsafe
-Customer ID: SEJ**************xAg
-Domain ID: Dq******************2w
-Client ID: O********************************hei0qsrc3k4p69
-Client Secret Key: t*********************c5q
+Customer ID: SEJ*#########################7788
+
+Domain ID: Dq*####################6Yh
+
+Client ID: O***#####################y988
+
+Client Secret Key: t##################################
+
 
 

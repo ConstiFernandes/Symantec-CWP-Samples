@@ -10,6 +10,7 @@ After you have activated your account, completed AWS, Azure or Google Cloud Conn
 1. First step is to Create API access keys. After login to CWP console, go to 'Settings' page and click on 'API Keys' tab
 
 2. Copy following API secret keys and your CWP tenant ID information and keep themsafe
+
 Customer ID: SEJ*#########################7788
 
 Domain ID: Dq*####################6Yh

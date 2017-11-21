@@ -48,6 +48,7 @@ def download_agentpkg_from_scwp_server(choiceofpkg):
   #CWP REST API endpoint URL download package function
   urldonwnload = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/agents/packages/download/platform/'
   urldonwnload = urldonwnload + choiceofpkg
+  #print urldonwnload
 
   #Add to payload and header your CWP tenant & API keys - client_id, client_secret, x-epmp-customer-id and x-epmp-domain-id
   headerdownload = {"Authorization": accesstoken ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
@@ -98,6 +99,10 @@ if __name__=="__main__":
      choiceofpkg = 'centos7'
    elif '-centos-6' in osversion:
      choiceofpkg = 'centos6'
+   elif 'Ubuntu-16' in osversion:
+    choiceofpkg = 'ubuntu16'
+   elif 'Ubuntu-14' in osversion:
+    choiceofpkg = 'ubuntu14'
    elif 'windows' in osversion:
      choiceofpkg = 'windows'
 
@@ -129,6 +134,3 @@ if __name__=="__main__":
      os.system('chmod 700 ./installagent.sh')
      os.system('./installagent.sh')
      os.system('reboot')
-
-
-

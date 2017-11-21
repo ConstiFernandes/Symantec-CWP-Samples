@@ -1,18 +1,3 @@
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Marketplace
-Explore
- @ConstiF
- Sign out
- Watch 0
-  Star 0  Fork 0 ConstiF/Symantec-CWP-Samples
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights  Settings
-Symantec-CWP-Samples/README.md
-Symantec-CWP-Samples
-
 Sample code projects for building security applications using Symantec Cloud Workload Protection REST API
 
 Before you get started you need a Symantec Cloud Workload Protection Account. If you do not have one sign up for a trial account using this link, select the 'Cloud Workload Protection' check box: https://securitycloud.symantec.com/cc/?CID=123456123456123456&pr_id=F979E61C-A412-4A58-8879-B83E25B7327F#/onboard
@@ -41,24 +26,4 @@ cwppolicygroup.py This python script can be used to apply a CWP policy group on 
 
 cwprunavscan.py This script demonstrates the run AV Scan API. This script automatically determines the AWS instance ID where this script is executed. You many specify the instance id of another instance as well. You can run AV scan as 'manual' on demand or as a 'scheduled job'
 
-@ConstiF
-Commit changes
 
-Delete README.md
-
-Add an optional extended description…
-  Commit directly to the master branch.
-  Create a new branch for this commit and start a pull request. Learn more about pull requests.
-Commit changes  Cancel
-© 2017 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-API
-Training
-Shop
-Blog
-About

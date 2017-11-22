@@ -31,7 +31,11 @@ cwprunavscan.py
 This script demonstrates the run AV Scan API. This script automatically determines the AWS instance ID where this script is executed. You many specify the instance id of another instance as well. You can run AV scan as 'manual' on demand or as a 'scheduled job'
 
 -----------------------------------------------------------------------------------------------------------------------
-cwpgetlarts.py
+cwpgetalerts.py
+Script to download CWP Alerts using CWP REST API. This script can be used to input data into splunk as script input
+
+-----------------------------------------------------------------------------------------------------------------------
+cwpgetevents.py
 Script to download CWP Alerts using CWP REST API. This script can be used to input data into splunk as script input
 
 -----------------------------------------------------------------------------------------------------------------------

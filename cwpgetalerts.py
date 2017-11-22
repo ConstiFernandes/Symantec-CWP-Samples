@@ -2,7 +2,7 @@
 #
 # Copyright 2017 Symantec Corporation. All rights reserved.
 #
-#Script to automate AV scan execution on an AW/AzureS Instance
+#Script to download CWP Alerts using CWP REST API. This script can be used to input data into splunk as script input
 #Refer to CWP REST API at: https://apidocs.symantec.com/home/scwp#_symantec_cloud_workload_protection
 #Note: Before you run this script you have to create a ScwpGetAlertsConfig.ini in the script folder. Details Below
 ##################################################################################################################

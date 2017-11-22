@@ -113,8 +113,8 @@ try:
 	clientId = Config.get(CONFIG_CREDS_SECTION, CLIENT_ID)
 	clientSecret = Config.get(CONFIG_CREDS_SECTION, CLIENT_SECRET)
 	alertTypeFilterConfig = Config.get(CONFIG_ALERTS_SECTION, ALERT_TYPE_FILTER)
-    alertSearchFilterConfig = Config.get(CONFIG_ALERTS_SECTION, SEARCH_FILTER)
-    getAlertProfileRuleName = Config.get(CONFIG_ALERTS_SECTION, ALERT_PROFILE_RULE)
+    	alertSearchFilterConfig = Config.get(CONFIG_ALERTS_SECTION, SEARCH_FILTER)
+    	getAlertProfileRuleName = Config.get(CONFIG_ALERTS_SECTION, ALERT_PROFILE_RULE)
 	authHeaders['x-epmp-customer-id'] = customerId
 	authHeaders['x-epmp-domain-id'] = domainId
 	authRequest['client_id'] = clientId
@@ -135,10 +135,10 @@ try:
 
 	alertTypes = alertTypeFilterConfig.strip().split(',')
 	alertTypesWithQuotes = ','.join('\"{0}\"'.format(alertType) for alertType in alertTypes)
-    if getAlertProfileRuleName.strip() != '':
-        alertTypeFilter = '(rule_name ' + getAlertProfileRuleName + ') && (type_id = 16 &&  events.type_class is_not null)'
-    else:
-        alertTypeFilter = '(type_id = 16 &&  events.type_class is_not null)'
+	if getAlertProfileRuleName.strip() != '':
+        	alertTypeFilter = '(rule_name ' + getAlertProfileRuleName + ') && (type_id = 16 &&  events.type_class is_not null)'
+        else:
+        	alertTypeFilter = '(type_id = 16 &&  events.type_class is_not null)'
     #print '\n' + alertTypeFilter
 	getScwpAlertsRequest['startDate'] = startDate
 	getScwpAlertsRequest['endDate'] = datetime.now().isoformat()

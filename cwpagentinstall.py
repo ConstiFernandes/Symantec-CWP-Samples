@@ -14,18 +14,18 @@ import json
 import time
 
 #Function to call CWP REST API and download Agent package
-def download_agentpkg_from_scwp_server(choiceofpkg):
+def download_agentpkg_from_scwp_server(osdistribution):
   token = {}
   mydict = {}
 
   #CWP REST API endpoint URL for auth function
   url = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/oauth/tokens'
-  
+
   #TODO: Make sure you save your own CWP API keys here
-  clientsecret='t6r4m————————srjhc5q'
-  clientID='O2ID—————————————i0qsrc3k4p69'
-  customerID='SEJ——————8STA8YCxAg'
-  domainID='Dqdf—————IITB2w'
+  clientsecret='1nc$$#################g8j4s7'
+  clientID='O2ID.SE&&&!^!!%!!^!!!!!&&!&!&&j91g5'
+  customerID='SETAYYAIAI&&&^^A%A%AAg'
+  domainID='Dqdf#######$^$^$%$%B2w'
 
   #Add to payload and header your CWP tenant & API keys - client_id, client_secret, x-epmp-customer-id and x-epmp-domain-id
   payload = {'client_id' : clientID, 'client_secret' : clientsecret}
@@ -37,28 +37,58 @@ def download_agentpkg_from_scwp_server(choiceofpkg):
     print "\nAuthentication Failed. Did you replace the API keys in the code with your CWP API Keys? Check clientsecret, clientID, customerID, and domainID\n"
     exit()
 
-  #Extracting auth token
+  #Extracting auth token    
   accesstoken= token['access_token']
   accesstoken = "Bearer " + accesstoken
 
+  #Additional checks to make sure the agent is installed on supported Kernel versions
+  kernel = platform.release()
+  kernelversion = kernel.strip()
+  print "Detected OS: " + osdistribution + ", Kernel: " +  kernelversion
+
+  #CWP REST API function endpoint URL for checking if platform and kernel is supported
+  urlplatformcheck = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/agents/packages/supported-platforms'
+  payload={}
+  payload['osDistribution'] = osdistribution
+  payload['kernelVersion'] = kernelversion
+
+  #print 'Payload: ' + str(payload)
+  headerplatformcheck = {"Authorization": accesstoken ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID , "Content-Type": "application/json"}
+  #print 'Headers: ' + str(headerplatformcheck)
+
+  response = requests.put(urlplatformcheck, data= json.dumps(payload), headers=headerplatformcheck)
+  if response.status_code != 200:
+        print "supported-platforms API call failed \n"
+        exit()
+  outputplatformcheck = {}
+  outputplatformcheck = response.json()
+  #print outputplatformcheck
+
+  if (outputplatformcheck['supported']) :
+        print "Supported OS: " + osdistribution + ", Kernel: " +  kernelversion
+        print "\n" + outputplatformcheck['description']
+  else :
+        print "Non Supported OS: " + osdistribution + ", Kernel: " +  kernelversion
+        print outputplatformcheck['description'] + "\n"
+        exit()
+
   #Output agent platform package type passed as a parameter for debugging
-  mychoiceofpkg = choiceofpkg
-  print "\nDownloading Agent package :-> " +  choiceofpkg + "  to current directory \n"
+  myosdistribution = osdistribution
+  print "\nDownloading Agent package :-> " +  osdistribution + "  to current directory \n"
 
   #CWP REST API endpoint URL download package function
   urldonwnload = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/agents/packages/download/platform/'
-  urldonwnload = urldonwnload + choiceofpkg
-  #print urldonwnload
+  urldonwnload = urldonwnload + osdistribution
 
   #Add to payload and header your CWP tenant & API keys - client_id, client_secret, x-epmp-customer-id and x-epmp-domain-id
   headerdownload = {"Authorization": accesstoken ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
   response = requests.get(urldonwnload, headers=headerdownload)
   
   #On Windows save file as a .zip and as a .tar.gz on linux
-  if (choiceofpkg =='windows') :
-      nameofpkg='scwp_agent_' + choiceofpkg + '_package.zip'
+  if (osdistribution =='windows') :
+      nameofpkg='scwp_agent_' + osdistribution + '_package.zip'
   else :
-      nameofpkg='scwp_agent_' + choiceofpkg + '_package.tar.gz'
+      nameofpkg='scwp_agent_' + osdistribution + '_package.tar.gz'
   with open(nameofpkg, "wb") as code:
      #Save downloaded package to local file
      code.write(response.content)
@@ -76,7 +106,7 @@ def download_agentpkg_from_scwp_server(choiceofpkg):
 
 if __name__=="__main__":
    #First dump Instance metadata to use as reference
-   os.system('curl -s http://169.254.169.254/latest/dynamic/instance-identity/document')
+   #os.system('curl -s http://169.254.169.254/latest/dynamic/instance-identity/document')
    #Determine OS platform name that is needed as input to CWP download agent REST API function
 
    #print Current working director for referenxe
@@ -86,51 +116,54 @@ if __name__=="__main__":
    #some sample code to detect type of OS platform. CWP API needs platform to be specified in the REST endpoint URL
    osversion = 'undefined'
    osversion = platform.platform()
-   print osversion
-   choiceofpkg = 'undefined'
+   #print osversion
+   osdistribution = 'undefined'
 
    if '.amzn1.' in osversion:
-     choiceofpkg = 'amazonlinux'
+     osdistribution = 'amazonlinux'
    elif '-redhat-7' in osversion:
-     choiceofpkg = 'rhel7'
+     osdistribution = 'rhel7'
    elif '-redhat-6' in osversion:
-     choiceofpkg = 'rhel6'
+     osdistribution = 'rhel6'
    elif '-centos-7' in osversion:
-     choiceofpkg = 'centos7'
+     osdistribution = 'centos7'
    elif '-centos-6' in osversion:
-     choiceofpkg = 'centos6'
+     osdistribution = 'centos6'
    elif 'Ubuntu-16' in osversion:
-    choiceofpkg = 'ubuntu16'
+    osdistribution = 'ubuntu16'
    elif 'Ubuntu-14' in osversion:
-    choiceofpkg = 'ubuntu14'
+    osdistribution = 'ubuntu14'
    elif 'windows' in osversion:
-     choiceofpkg = 'windows'
+     osdistribution = 'windows'
 
    #You may add additional checks to make sure the agent is installed on supported Kernel versions
    #if osversion in ['Linux-4.9.51-10.52.amzn1.x86_64-x86_64-with-glibc2.2.5', 'Linux-4.9.51-10.52.amzn1.x86_64-x86_64-with-glibc2.2.5']:
-   #  choiceofpkg = 'amazonlinux'
+   #  osdistribution = 'amazonlinux'
    #else:
    #  exit()
 
    #Make sure the selected Platform is one of the supported list
-   print choiceofpkg
+   #print osdistribution
    oslist = ['centos6', 'centos7', 'rhel6', 'rhel7', 'ubuntu14', 'ubuntu16', 'amazonlinux', 'windows']
-   if choiceofpkg not in  oslist:
+   if osdistribution not in  oslist:
     print "\n Invalid OS Platform\n"
     exit()
 
-   download_agentpkg_from_scwp_server(choiceofpkg)
+   download_agentpkg_from_scwp_server(osdistribution)
 
    #Install for Windows. You can add custom code to expand .zip file and run installagent.bat
-   if choiceofpkg == 'windows':
+   if osdistribution == 'windows':
     exit()
 
    #Install for Linux Platforms
    else:
-     pkgtocopy="scwp_agent_" + choiceofpkg + "_package.tar.gz"
+     pkgtocopy="scwp_agent_" + osdistribution + "_package.tar.gz"
      package_local = pkgtocopy
      tarcommand = "tar -xvzf " + package_local
      os.system(tarcommand)
      os.system('chmod 700 ./installagent.sh')
      os.system('./installagent.sh')
      os.system('reboot')
+
+
+

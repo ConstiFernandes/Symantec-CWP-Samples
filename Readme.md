@@ -29,6 +29,9 @@ NOTE: If your Linux system already has a previous version of the agent, the agen
 -----------------------------------------------------------------------------------------------------------------------
 cwppolicygroup.py This python script can be used to apply a CWP policy group on a AWS instance. The script automatically finds the AWS instance ID on which this script is executed. You may replace that with the instance ID of another instance. This script also demonstrates the use of 'revoke' policy API call. To get the Policy group ID, navigate in CWP to the policy group details page and copy the policy group ID from the browser URL. E.g. Bm0_7LdATGOLdrwJnnKMTA from the URL sample below https://scwp.securitycloud.symantec.com/webportal/#/cloud/policy-group/view?policyGroupId=Bm0_7LdATGOLdrwJnnKMTA
 
+12/9/2017: CWP Policy API now supports passing the virtual machines 'Insatance ID' identifier from public cloud provider. 
+E.g.'i-06124fd93d7929320' for AWS, '5223adcc-7585-4695-9a69-3b1484a01687' for Azure and '4492639654741810765' for GCP. 
+cwppolicyapply.py script is now updated to send the 'instance id' instead of CWP internal asset ID.
 -----------------------------------------------------------------------------------------------------------------------
 cwprunavscan.py 
 This script demonstrates the run AV Scan API. This script automatically determines the AWS instance ID where this script is executed. You many specify the instance id of another instance as well. You can run AV scan as 'manual' on demand or as a 'scheduled job'

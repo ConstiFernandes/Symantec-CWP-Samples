@@ -45,9 +45,12 @@ if __name__=="__main__":
   accesstoken = "Bearer " + accesstoken
   #print "\nAccess Token: " + accesstoken
 
+  '''
+  #12/9/2017: You no longer need to get CWP internal Asset ID for calling Policy Group Apply. API now supports 'instance id'. Code commented
   #CWP Policy APIs do not accept AWS/Azure Instance IDs yet. You have to get CWP internal Asset ID using Asset API
   headerforapi = {"Content-type": "application/json","Authorization": accesstoken ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
   #print "\nHeaders for Policy API: " + str(headerforapi)
+  
 
   getInstanceIdUrl = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/ui/assets?fields=id&where=(instance_id=\''+ instanceid +'\')'
   print "\nGet Asset ID  url: " + getInstanceIdUrl
@@ -60,18 +63,18 @@ if __name__=="__main__":
     exit()
   else:
     print "\nCWP Asset API worked. Not let's get CWP Asset internal ID and go to calling Policy API"
- 
+  
   if (len(assetresponseJson.get("results")) > 0):
     cwpassetid = assetresponseJson.get("results")[0].get("id")
     print (cwpassetid)
   else:
     print "\nCould not get CWP Asset ID for instance: '" + instanceid
     exit()
-
+  '''
 
   #First let us remove policy group if one is applied on this instance
   #REST endpoint for revoke Policy
-  revokeurl = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/policy/policygroups/'+ cwpassetid +'/all'
+  revokeurl = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/policy/policygroups/'+ instanceid +'/all'
   print "\nRevoke policy group url: " + revokeurl
   
   revokeresponse = requests.delete(revokeurl, headers=headerforapi)
@@ -87,7 +90,7 @@ if __name__=="__main__":
   policygrouptoapply = 'QYFdN2ncS5qfmz1T9Pakbw'
 
   #REST endpoint for Apply Policy Group
-  applyurl = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/policy/assets/'+ cwpassetid +'/policy_groups/' + policygrouptoapply
+  applyurl = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/policy/assets/'+ instanceid +'/policy_groups/' + policygrouptoapply
   print "\nApply policy group url: " + applyurl
   applyresponse = requests.put(applyurl, headers=headerforapi)
   applyresult=applyresponse.status_code

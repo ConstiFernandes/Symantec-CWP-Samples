@@ -2,8 +2,12 @@
 #
 # Copyright 2017 Symantec Corporation. All rights reserved.
 #
-#Script to automate deployment of Symantec Cloud Workload Protection Agent on a Virtual Machine. This script can be used in AWS user data field during instance launch
+#Script to automate deployment of Symantec Cloud Workload Protection Agent on a Virtual Machine. This script also applies a CWP Policy Group.
+#This script can be used in AWS user data field during instance launch
 #Refer to CWP REST API at: https://apidocs.symantec.com/home/scwp#_symantec_cloud_workload_protection
+#Customer has to pass Customer ID, Domain ID, Client ID and Client Secret Key as arguments. The keys are available in CWP portal's Settings->API Key tab
+#Script no longer reboots the server. This script can be used in AWS & Azure launch configs.
+#Usage: python cwpagentinstall.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key>"
 #######################################################################################################################################################################
 
 import platform
@@ -12,6 +16,13 @@ import requests
 import string
 import json
 import time
+import sys
+
+#Customer has to pass Customer ID, Domain ID, Client ID and Client Secret Key as arguments. The keys are available in CWP portal's Settings->API Key tab
+clientsecret=''
+clientID=''
+customerID=''
+domainID=''
 
 #Function to call CWP REST API and download Agent package
 def download_agentpkg_from_scwp_server(osdistribution):
@@ -22,10 +33,10 @@ def download_agentpkg_from_scwp_server(osdistribution):
   url = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/oauth/tokens'
 
   #TODO: Make sure you save your own CWP API keys here
-  clientsecret='1nc$$#################g8j4s7'
-  clientID='O2ID.SE&&&!^!!%!!^!!!!!&&!&!&&j91g5'
-  customerID='SETAYYAIAI&&&^^A%A%AAg'
-  domainID='Dqdf#######$^$^$%$%B2w'
+  clientsecret='1nch7qsekpkavl5u7sm77q1kd7roe6g8j4s7'
+  clientID='O2ID.SEJxecAoTEWP8STA8YCxAg.Dqdfie4RRQyB9B64IITB2w.p14tq4f9mb74d2d0qfan5j91g5'
+  customerID='SEJxecAoTEWP8STA8YCxAg'
+  domainID='Dqdfie4RRQyB9B64IITB2w'
 
   #Add to payload and header your CWP tenant & API keys - client_id, client_secret, x-epmp-customer-id and x-epmp-domain-id
   payload = {'client_id' : clientID, 'client_secret' : clientsecret}
@@ -34,17 +45,17 @@ def download_agentpkg_from_scwp_server(osdistribution):
   authresult=response.status_code
   token=response.json()
   if (authresult!=200) :
-    print "\nAuthentication Failed. Did you replace the API keys in the code with your CWP API Keys? Check clientsecret, clientID, customerID, and domainID\n"
+    print ("\nAuthentication Failed. Did you replace the API keys in the code with your CWP API Keys? Check clientsecret, clientID, customerID, and domainID\n")
     exit()
 
-  #Extracting auth token    
+  #Extracting auth token
   accesstoken= token['access_token']
   accesstoken = "Bearer " + accesstoken
 
-  #Additional checks to make sure the agent is installed on supported Kernel versions
+#Additional checks to make sure the agent is installed on supported Kernel versions
   kernel = platform.release()
   kernelversion = kernel.strip()
-  print "Detected OS: " + osdistribution + ", Kernel: " +  kernelversion
+  print ("Detected OS: " + osdistribution + ", Kernel: " +  kernelversion)
 
   #CWP REST API function endpoint URL for checking if platform and kernel is supported
   urlplatformcheck = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/agents/packages/supported-platforms'
@@ -58,23 +69,23 @@ def download_agentpkg_from_scwp_server(osdistribution):
 
   response = requests.put(urlplatformcheck, data= json.dumps(payload), headers=headerplatformcheck)
   if response.status_code != 200:
-        print "supported-platforms API call failed \n"
+        print ("supported-platforms API call failed \n")
         exit()
   outputplatformcheck = {}
   outputplatformcheck = response.json()
   #print outputplatformcheck
 
   if (outputplatformcheck['supported']) :
-        print "Supported OS: " + osdistribution + ", Kernel: " +  kernelversion
-        print "\n" + outputplatformcheck['description']
+        print ("Supported OS: " + osdistribution + ", Kernel: " +  kernelversion);
+        print ("\n" + outputplatformcheck['description'])
   else :
-        print "Non Supported OS: " + osdistribution + ", Kernel: " +  kernelversion
-        print outputplatformcheck['description'] + "\n"
+        print ("Non Supported OS: " + osdistribution + ", Kernel: " +  kernelversion)
+        print (outputplatformcheck['description'] + "\n")
         exit()
 
   #Output agent platform package type passed as a parameter for debugging
   myosdistribution = osdistribution
-  print "\nDownloading Agent package :-> " +  osdistribution + "  to current directory \n"
+  print ("\nDownloading Agent package :-> " +  osdistribution + "  to current directory \n")
 
   #CWP REST API endpoint URL download package function
   urldonwnload = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/agents/packages/download/platform/'
@@ -83,7 +94,7 @@ def download_agentpkg_from_scwp_server(osdistribution):
   #Add to payload and header your CWP tenant & API keys - client_id, client_secret, x-epmp-customer-id and x-epmp-domain-id
   headerdownload = {"Authorization": accesstoken ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
   response = requests.get(urldonwnload, headers=headerdownload)
-  
+
   #On Windows save file as a .zip and as a .tar.gz on linux
   if (osdistribution =='windows') :
       nameofpkg='scwp_agent_' + osdistribution + '_package.zip'
@@ -99,26 +110,35 @@ def download_agentpkg_from_scwp_server(osdistribution):
      filename = mydict['content-disposition']
      #Check if file was doenloaded successfully
      if filename.find(nameofpkg) :
-        print "\nAgent package :-> " +  nameofpkg + " downloaded successfully to current directory \n"
+        print ("\nAgent package :-> " +  nameofpkg + " downloaded successfully to current directory \n")
   else :
-     print "\nDownload agent API failed. Specify correct platform name.\n"
+     print ("\nDownload agent API failed. Specify correct platform name.\n")
      exit()
 
 if __name__=="__main__":
+
+   if (len(sys.argv) < 5):
+      print ("Insufficient number of arguments passed. Pass all 4 CWP API key parameters from 'Setting Page->API Keys' tab. Usage: python cwpagentinstall.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key>")
+      exit()
+   clientsecret=sys.argv[1]
+   clientID=sys.argv[2]
+   customerID=sys.argv[3]
+   domainID=sys.argv[4]
+   
    #First dump Instance metadata to use as reference
    #os.system('curl -s http://169.254.169.254/latest/dynamic/instance-identity/document')
    #Determine OS platform name that is needed as input to CWP download agent REST API function
 
    #print Current working director for referenxe
    curentdir = os.getcwd()
-   print "\nCurrent Working Path = " + os.getcwd()
+   print ("\nCurrent Working Path = " + os.getcwd())
 
    #some sample code to detect type of OS platform. CWP API needs platform to be specified in the REST endpoint URL
    osversion = 'undefined'
    osversion = platform.platform()
-   #print osversion
+   print (osversion)
+   osversion= '.amzn1.'
    osdistribution = 'undefined'
-
    if '.amzn1.' in osversion:
      osdistribution = 'amazonlinux'
    elif '-redhat-7' in osversion:
@@ -138,7 +158,7 @@ if __name__=="__main__":
 
    #You may add additional checks to make sure the agent is installed on supported Kernel versions
    #if osversion in ['Linux-4.9.51-10.52.amzn1.x86_64-x86_64-with-glibc2.2.5', 'Linux-4.9.51-10.52.amzn1.x86_64-x86_64-with-glibc2.2.5']:
-   #  osdistribution = 'amazonlinux'
+   #osdistribution = 'amazonlinux'
    #else:
    #  exit()
 
@@ -146,7 +166,7 @@ if __name__=="__main__":
    #print osdistribution
    oslist = ['centos6', 'centos7', 'rhel6', 'rhel7', 'ubuntu14', 'ubuntu16', 'amazonlinux', 'windows']
    if osdistribution not in  oslist:
-    print "\n Invalid OS Platform\n"
+    print ("\n Invalid OS Platform\n")
     exit()
 
    download_agentpkg_from_scwp_server(osdistribution)
@@ -163,7 +183,4 @@ if __name__=="__main__":
      os.system(tarcommand)
      os.system('chmod 700 ./installagent.sh')
      os.system('./installagent.sh')
-     os.system('reboot')
-
-
-
+     

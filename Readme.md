@@ -25,6 +25,7 @@ Code Files
 
 cwpagentinstall.py This python script downloads CWP agent installer from your CWP account, saves the files locally, runs the agent installer and reboots the instance. You can insert this script in your AWS instance launch 'user data'. Refer to this article for more information http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-windows-user-data.html
 NOTE: If your Linux system already has a previous version of the agent, the agent installer automatically upgrades the agent.
+
 01/14/2018: Scrpt has been updated to now take Customer ID, Domain ID, Client ID and Client Secret Key as arguments. The keys are available in CWP portal's Settings->API Key tab
 Script no longer reboots the server. This script can be used in AWS & Azure launch configs.
 Usage: python cwpagentinstall.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key>"

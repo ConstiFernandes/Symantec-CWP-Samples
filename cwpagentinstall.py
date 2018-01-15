@@ -137,7 +137,7 @@ if __name__=="__main__":
    osversion = 'undefined'
    osversion = platform.platform()
    print (osversion)
-   osversion= '.amzn1.'
+  
    osdistribution = 'undefined'
    if '.amzn1.' in osversion:
      osdistribution = 'amazonlinux'

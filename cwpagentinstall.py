@@ -31,13 +31,7 @@ def download_agentpkg_from_scwp_server(osdistribution):
 
   #CWP REST API endpoint URL for auth function
   url = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/oauth/tokens'
-
-  #TODO: Make sure you save your own CWP API keys here
-  clientsecret='1nch7qsekpkavl5u7sm77q1kd7roe6g8j4s7'
-  clientID='O2ID.SEJxecAoTEWP8STA8YCxAg.Dqdfie4RRQyB9B64IITB2w.p14tq4f9mb74d2d0qfan5j91g5'
-  customerID='SEJxecAoTEWP8STA8YCxAg'
-  domainID='Dqdfie4RRQyB9B64IITB2w'
-
+  
   #Add to payload and header your CWP tenant & API keys - client_id, client_secret, x-epmp-customer-id and x-epmp-domain-id
   payload = {'client_id' : clientID, 'client_secret' : clientsecret}
   header = {"Content-type": "application/json" ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
@@ -120,10 +114,11 @@ if __name__=="__main__":
    if (len(sys.argv) < 5):
       print ("Insufficient number of arguments passed. Pass all 4 CWP API key parameters from 'Setting Page->API Keys' tab. Usage: python cwpagentinstall.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key>")
       exit()
-   clientsecret=sys.argv[1]
-   clientID=sys.argv[2]
-   customerID=sys.argv[3]
-   domainID=sys.argv[4]
+   
+   customerID=sys.argv[1]
+   domainID=sys.argv[2]
+   clientID=sys.argv[3]
+   clientsecret=sys.argv[4]
    
    #First dump Instance metadata to use as reference
    #os.system('curl -s http://169.254.169.254/latest/dynamic/instance-identity/document')

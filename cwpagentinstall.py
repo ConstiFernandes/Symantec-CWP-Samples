@@ -156,12 +156,6 @@ if __name__=="__main__":
    elif 'windows' in osversion:
      osdistribution = 'windows'
 
-   #You may add additional checks to make sure the agent is installed on supported Kernel versions
-   #if osversion in ['Linux-4.9.51-10.52.amzn1.x86_64-x86_64-with-glibc2.2.5', 'Linux-4.9.51-10.52.amzn1.x86_64-x86_64-with-glibc2.2.5']:
-   #osdistribution = 'amazonlinux'
-   #else:
-   #  exit()
-
    #Make sure the selected Platform is one of the supported list
    #print osdistribution
    oslist = ['centos6', 'centos7', 'rhel6', 'rhel7', 'ubuntu14', 'ubuntu16', 'amazonlinux', 'windows']

@@ -32,6 +32,8 @@ Customer has to pass Customer ID, Domain ID, Client ID and Client Secret Key as 
 Usage: python cwpasset.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <instanceid>"
 instanceid is optional. if instance Id is not passed, the script enumerates all instances in AWS. To get instances from Azure chage query filter to (cloud_platform in [\'Azure\'])
 Sample Usage: python cwpasset.py 'SEJHHHHHHA8YCxAg' 'DqdfTTTTTTTTTTB2w' 'O2ID.SEJxecAoTUUUUUUUUUUIITB2w.peu1ojru61uhhei0qsrc3k4p69' 't6r4mc3pfr5qmu4i6co7902huhg2srjhc5q' i-0967334540ff50b85
+
+1/9/2018 - Updated script to output Supported Agent protection technologies (IPS/IDS/AMD) and Cloud Platform (AWS/Azure) tags  
   
 -----------------------------------------------------------------------------------------------------------------------
 

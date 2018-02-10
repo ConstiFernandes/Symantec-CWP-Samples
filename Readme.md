@@ -26,7 +26,7 @@ Code Files
 -----------------------------------------------------------------------------------------------------------------------
 cwpasset.py
 
-1/9/2018 - Script to get CWP asset (instance) details
+1/9/2018 - Script to get CWP asset (instance) details. Script outputs instance id, instane name, AWS/Azure Connection name, Agent Version and AV definition update dates, and all installed applications and count of know vulnerabilities
 Refer to CWP REST API at: https://apidocs.symantec.com/home/scwp#_symantec_cloud_workload_protection
 Customer has to pass Customer ID, Domain ID, Client ID and Client Secret Key as arguments. The keys are available in CWP portal's Settings->API Key tab
 Usage: python cwpasset.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <instanceid>"

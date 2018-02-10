@@ -2,12 +2,12 @@
 #
 # Copyright 2017 Symantec Corporation. All rights reserved.
 #
-#Script to get CWP asset (instance) details. Script outputs instance id, instane name, AWS/Azure Connection name, Agent Version and AV definition update dates, and all installed applications and count of know vulnerabilities
+#Script to get CWP asset (instance) details
 #Refer to CWP REST API at: https://apidocs.symantec.com/home/scwp#_symantec_cloud_workload_protection
 #Customer has to pass Customer ID, Domain ID, Client ID and Client Secret Key as arguments. The keys are available in CWP portal's Settings->API Key tab
 #Usage: python cwpasset.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <instanceid>"
 #instanceid is optional. if instance Id is not passed, the script enumerates all instances in AWS. To get instances from Azure chage query filter to (cloud_platform in [\'Azure\'])
-#Sample Usage: python cwpasset.py 'SEJHHHHHHA8YCxAg' 'DqdfTTTTTTTTTTB2w' 'O2ID.SEJxecAoTUUUUUUUUUUIITB2w.peu1ojru61uhhei0qsrc3k4p69' 't6r4mc3pfr5qmu4i6co7902huhg2srjhc5q' i-0967334540ff50b85
+#Sample Usage: python cwpasset.py 'SEJHHHHHHA8YCxAg' 'DqdfTTTTTTTTTTB2w' 'O2ID.SEJxecAoTUUUUUUUUUUIITB2w.peu1ojqsrc3k4p69' 't6r4mc3pfr5huhg2srjhc5q' i-0967340ff50b85
 #####################################################################################################
 
 import os
@@ -86,15 +86,27 @@ if __name__=="__main__":
     #Print Agent version info and AV Definitions Info
     if security_agent is not None:
         props = security_agent.get("props")
+        #print ("Security Agent: " + str(props))
         if props is not None:
                 if props.get("cwp_agent_product_version") is not None:
-                        print ("Instance Agent Version: " + str(props.get("cwp_agent_product_version")))
+                        print ("Instance Hardening Agent Version: " + str(props.get("cwp_agent_product_version")))
                 if props.get("cwp_av_agent_product_version") is not None:
-                        print ("Instance AntiVirus Agent Version: " + str(props.get("cwp_av_agent_product_version")))        
+                        print ("Instance AntiVirus Agent Version: " + str(props.get("cwp_av_agent_product_version")))
         contents = security_agent.get("contents")
         if contents is not None:                
                 if contents.get("antivirus:version") is not None:
                         print ("Instance Virus Definition Version: " + str(contents.get("antivirus:version")))
+
+        #Print Support Agent Technologies
+        if (security_agent.get("supported_technologies")) is not None:
+                print ("\nAgent Current Supported Protection Technologies: " +  str(security_agent.get("supported_technologies")))
+        #Dump the entire CWP security agent JSON
+        print ("\nPrinting Entire Security Agent Object Json: " + str(security_agent))
+
+    #Print tags - CWP or AWS/Azure
+    if (assetresponseJson.get("results")[item].get("included_dcs_tags")is not None):
+        instance_tags = assetresponseJson.get("results")[item].get("included_dcs_tags")
+        print ("\nPrinting Tags Json: " + str(instance_tags))
 
     #Enumerate all discovered applications and Vulnerabilities
     installled_Products = assetresponseJson.get("results")[item].get("included_installed_products")
@@ -108,5 +120,4 @@ if __name__=="__main__":
                   #print ("Vulnerability ID: "+ str(vulnerabilities[vulnerability].get("vulnerability_id")));
     #print ('\nAsset Info Json:\n' + str(assetresponseJson.get("results")[item]))
     print ("----------------------------------------------------------")
-
-
+    

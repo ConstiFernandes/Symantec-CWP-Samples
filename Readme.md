@@ -22,7 +22,6 @@ Client Secret Key: t##################################
 
 -----------------------------------------------------------------------------------------------------------------------
 Code Files
-----------------------------------
 cwpasset.py
 Script to get CWP asset (instance) details
 Refer to CWP REST API at: https://apidocs.symantec.com/home/scwp#_symantec_cloud_workload_protection

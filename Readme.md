@@ -22,14 +22,22 @@ Client Secret Key: t##################################
 
 -----------------------------------------------------------------------------------------------------------------------
 Code Files
-
+----------------------------------
+cwpasset.py
+Script to get CWP asset (instance) details
+Refer to CWP REST API at: https://apidocs.symantec.com/home/scwp#_symantec_cloud_workload_protection
+Customer has to pass Customer ID, Domain ID, Client ID and Client Secret Key as arguments. The keys are available in CWP portal's Settings->API Key tab
+Usage: python cwpasset.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <instanceid>"
+instanceid is optional. if instance Id is not passed, the script enumerates all instances in AWS. To get instances from Azure chage query filter to (cloud_platform in [\'Azure\'])
+Sample Usage: python cwpasset.py 'SEJHHHHHHA8YCxAg' 'DqdfTTTTTTTTTTB2w' 'O2ID.SEJxecAoTUUUUUUUUUUIITB2w.peu1ojru61uhhei0qsrc3k4p69' 't6r4mc3pfr5qmu4i6co7902huhg2srjhc5q' i-0967334540ff50b85
+-----------------------------------
 cwpagentinstall.py This python script downloads CWP agent installer from your CWP account, saves the files locally, runs the agent installer and reboots the instance. You can insert this script in your AWS instance launch 'user data'. Refer to this article for more information http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-windows-user-data.html
 NOTE: If your Linux system already has a previous version of the agent, the agent installer automatically upgrades the agent.
 
 01/14/2018: Scrpt has been updated to now take Customer ID, Domain ID, Client ID and Client Secret Key as arguments. The keys are available in CWP portal's Settings->API Key tab
 Script no longer reboots the server. This script can be used in AWS & Azure launch configs.
 Usage: python cwpagentinstall.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key>"
-  
+Sample Usage: python cwpagentinstall.py 'SEJHHHHHHA8YCxAg' 'DqdfTTTTTTTTTTB2w' 'O2ID.SEJxecAoTUUUUUUUUUUIITB2w.peu1ojru61uhhei0qsrc3k4p69' 't6r4mc3pfr5qmu4i6co7902huhg2srjhc5q' 
 -----------------------------------------------------------------------------------------------------------------------
 cwppolicygroup.py This python script can be used to apply a CWP policy group on a AWS instance. The script automatically finds the AWS instance ID on which this script is executed. You may replace that with the instance ID of another instance. This script also demonstrates the use of 'revoke' policy API call. To get the Policy group ID, navigate in CWP to the policy group details page and copy the policy group ID from the browser URL. E.g. Bm0_7LdATGOLdrwJnnKMTA from the URL sample below https://scwp.securitycloud.symantec.com/webportal/#/cloud/policy-group/view?policyGroupId=Bm0_7LdATGOLdrwJnnKMTA
 

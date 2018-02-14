@@ -48,10 +48,10 @@ if __name__=="__main__":
   #Extracting auth token
   accesstoken= token['access_token']
   accesstoken = "Bearer " + accesstoken
-  print ("\nAccess Token: " + accesstoken)
+  #print ("\nAccess Token: " + accesstoken)
 
   headerforapi = {"Content-type": "application/json","Authorization": accesstoken ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
-  print ("\nHeaders for Policy API: " + str(headerforapi))
+  #print ("\nHeaders for Asset API: " + str(headerforapi))
   
   #Get Instances in AWS account, if instance id was passed enumerate instance detail only for that instance if not for all instances
   getInstanceIdUrl = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/ui/assets?'
@@ -81,7 +81,8 @@ if __name__=="__main__":
     if (connectionInfo is not None) :
         print ("Instance Connection Name: " + str(connectionInfo["name"]) + "\n")
         if connectionInfo["awsAccoundID"] is not None:
-            print ("Instance Connection AWS Account Number: " + str(connectionInfo["awsAccoundID"]) + "\n")        
+            print ("Instance Connection AWS Account Number: " + str(connectionInfo["awsAccoundID"]) + "\n")
+        print ("Connection Info JSON Object: " + str(connectionInfo))
     else:
         print ("Instance is private with no connection" + "\n")
     

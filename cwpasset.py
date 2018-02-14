@@ -7,7 +7,7 @@
 #Customer has to pass Customer ID, Domain ID, Client ID and Client Secret Key as arguments. The keys are available in CWP portal's Settings->API Key tab
 #Usage: python cwpasset.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <instanceid>"
 #instanceid is optional. if instance Id is not passed, the script enumerates all instances in AWS. To get instances from Azure chage query filter to (cloud_platform in [\'Azure\'])
-#Sample Usage: python cwpasset.py 'SEJHHHHHHA8YCxAg' 'DqdfTTTTTTTTTTB2w' 'O2ID.SEJxecAoTUUUUUUUUUUIITB2w.peu1ojqsrc3k4p69' 't6r4mc3pfr5huhg2srjhc5q' i-0967340ff50b85
+#Sample Usage: python cwpasset.py 'SEJHHHHHHA8YCxAg' 'DqdfTTTTTTTTTTB2w' 'O2ID.SEJxecAoTUUUUUUUUUUIITB2w.peu1ojqsrc3k4p69' 't6r4mUUUUUUUUUg2srjhc5q' i-UUUUUUff50b85
 #####################################################################################################
 
 import os
@@ -80,6 +80,8 @@ if __name__=="__main__":
     print ("Instance name: " + str(name) + "\n")
     if (connectionInfo is not None) :
         print ("Instance Connection Name: " + str(connectionInfo["name"]) + "\n")
+        if connectionInfo["awsAccoundID"] is not None:
+            print ("Instance Connection AWS Account Number: " + str(connectionInfo["awsAccoundID"]) + "\n")        
     else:
         print ("Instance is private with no connection" + "\n")
     
@@ -120,4 +122,3 @@ if __name__=="__main__":
                   #print ("Vulnerability ID: "+ str(vulnerabilities[vulnerability].get("vulnerability_id")));
     #print ('\nAsset Info Json:\n' + str(assetresponseJson.get("results")[item]))
     print ("----------------------------------------------------------")
-    

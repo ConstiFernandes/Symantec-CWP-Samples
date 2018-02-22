@@ -31,7 +31,7 @@ def download_agentpkg_from_scwp_server(osdistribution):
 
   #CWP REST API endpoint URL for auth function
   url = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/oauth/tokens'
-  
+
   #Add to payload and header your CWP tenant & API keys - client_id, client_secret, x-epmp-customer-id and x-epmp-domain-id
   payload = {'client_id' : clientID, 'client_secret' : clientsecret}
   header = {"Content-type": "application/json" ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
@@ -114,12 +114,12 @@ if __name__=="__main__":
    if (len(sys.argv) < 5):
       print ("Insufficient number of arguments passed. Pass all 4 CWP API key parameters from 'Setting Page->API Keys' tab. Usage: python cwpagentinstall.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key>")
       exit()
-   
+
    customerID=sys.argv[1]
    domainID=sys.argv[2]
    clientID=sys.argv[3]
    clientsecret=sys.argv[4]
-   
+
    #First dump Instance metadata to use as reference
    #os.system('curl -s http://169.254.169.254/latest/dynamic/instance-identity/document')
    #Determine OS platform name that is needed as input to CWP download agent REST API function
@@ -132,7 +132,7 @@ if __name__=="__main__":
    osversion = 'undefined'
    osversion = platform.platform()
    print (osversion)
-  
+
    osdistribution = 'undefined'
    if '.amzn1.' in osversion:
      osdistribution = 'amazonlinux'
@@ -150,10 +150,15 @@ if __name__=="__main__":
     osdistribution = 'ubuntu14'
    elif 'windows' in osversion:
      osdistribution = 'windows'
+   elif '-oracle-7' in osversion:
+     osdistribution = 'oel7'
+   elif '-oracle-6' in osversion:
+     osdistribution = 'oel6'
+
 
    #Make sure the selected Platform is one of the supported list
    #print osdistribution
-   oslist = ['centos6', 'centos7', 'rhel6', 'rhel7', 'ubuntu14', 'ubuntu16', 'amazonlinux', 'windows']
+   oslist = ['centos6', 'centos7', 'rhel6', 'rhel7', 'ubuntu14', 'ubuntu16', 'amazonlinux', 'windows', 'oel7', 'oel6']
    if osdistribution not in  oslist:
     print ("\n Invalid OS Platform\n")
     exit()
@@ -172,4 +177,3 @@ if __name__=="__main__":
      os.system(tarcommand)
      os.system('chmod 700 ./installagent.sh')
      os.system('./installagent.sh')
-     

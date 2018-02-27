@@ -24,10 +24,15 @@ Client Secret Key: t##################################
 Code Files
 
 -----------------------------------------------------------------------------------------------------------------------
+cwpavexcludepath.py
+Script to update AV exclusion path for Windows Servers. Call this "agents/av/configs/" rest API to push to all Windows AV agents a list of one of more folders to skip AV Scan.
+Refer to CWP REST API at https://apidocs.symantec.com/home/scwp#_anti_malware_scan_exclusion_service_for_windows
+
+-----------------------------------------------------------------------------------------------------------------------
 cwpasset.py
 
 1/9/2018 - Script to get CWP asset (instance) details. Script outputs instance id, instane name, AWS/Azure Connection name, Agent Version and AV definition update dates, and all installed applications and count of know vulnerabilities
-Refer to CWP REST API at: https://apidocs.symantec.com/home/scwp#_symantec_cloud_workload_protection
+Refer to CWP REST API at: https://apidocs.symantec.com/home/scwp#_fetch_assets_service
 Customer has to pass Customer ID, Domain ID, Client ID and Client Secret Key as arguments. The keys are available in CWP portal's Settings->API Key tab
 Usage: python cwpasset.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <instanceid>"
 instanceid is optional. if instance Id is not passed, the script enumerates all instances in AWS. To get instances from Azure chage query filter to (cloud_platform in [\'Azure\'])

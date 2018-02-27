@@ -45,7 +45,8 @@ Script no longer reboots the server. This script can be used in AWS & Azure laun
 Usage: python cwpagentinstall.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key>"
 Sample Usage: python cwpagentinstall.py 'SEJHHHHHHA8YCxAg' 'DqdfTTTTTTTTTTB2w' 'O2ID.SEJxecAoTUUUUUUUUUUIITB2w.peu1ojru61uhhei0qsrc3k4p69' 't6r4mc3pfr5qmu4i6co7902huhg2srjhc5q' 
   
-  
+ 02/21/2018: Script has been updated to support detection of Oracle Enterprise Linus Distribution & Kernel. 
+ 
 -----------------------------------------------------------------------------------------------------------------------
 cwppolicygroup.py This python script can be used to apply a CWP policy group on a AWS instance. The script automatically finds the AWS instance ID on which this script is executed. You may replace that with the instance ID of another instance. This script also demonstrates the use of 'revoke' policy API call. To get the Policy group ID, navigate in CWP to the policy group details page and copy the policy group ID from the browser URL. E.g. Bm0_7LdATGOLdrwJnnKMTA from the URL sample below https://scwp.securitycloud.symantec.com/webportal/#/cloud/policy-group/view?policyGroupId=Bm0_7LdATGOLdrwJnnKMTA
 

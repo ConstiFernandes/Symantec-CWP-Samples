@@ -34,7 +34,7 @@ PAGE_SIZE = 100
 RETRY_COUNT = 3
 
 #TODO:Load CWP API keys & filters from a config file. Create a config file 'ScwpGetAlertsConfig.ini' with this content.
-#Replace the keys with your CWP from the CWP Settings page->API Keys tab
+#Replace the keys with your CWP from the CWP Settings page->API Keys tab 
 '''
 [Credentials]
 CUSTOMER_ID = SEJx##############AxAg

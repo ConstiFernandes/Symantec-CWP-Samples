@@ -56,7 +56,7 @@ if __name__=="__main__":
     print "\nCWP AVScan API Failed"
     exit()
   else:
-    print "\nCWP AVScan API successfull"
+    print "\nCWP AVScan API successfull" 
 
 
 

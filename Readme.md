@@ -29,7 +29,7 @@ Script to update AV exclusion path for Windows Servers. Call this "agents/av/con
 Refer to CWP REST API at https://apidocs.symantec.com/home/scwp#_anti_malware_scan_exclusion_service_for_windows
 
 -----------------------------------------------------------------------------------------------------------------------
-cwpasset.py
+cwpasset.py, cwpasset_paged.py
 
 1/9/2018 - Script to get CWP asset (instance) details. Script outputs instance id, instane name, AWS/Azure Connection name, Agent Version and AV definition update dates, and all installed applications and count of know vulnerabilities
 Refer to CWP REST API at: https://apidocs.symantec.com/home/scwp#_fetch_assets_service
@@ -39,6 +39,8 @@ instanceid is optional. if instance Id is not passed, the script enumerates all 
 Sample Usage: python cwpasset.py 'SEJHHHHHHA8YCxAg' 'DqdfTTTTTTTTTTB2w' 'O2ID.SEJxecAoTUUUUUUUUUUIITB2w.peu1ojru61uhhei0qsrc3k4p69' 't6r4mc3pfr5qmu4i6co7902huhg2srjhc5q' i-0967334540ff50b85
 
 1/9/2018 - Updated script to output Supported Agent protection technologies (IPS/IDS/AMD) and Cloud Platform (AWS/Azure) tags  
+
+2/27/2018 - Added cwpasset_page.py, scripts to get asset info in a paged manner. Use this code to get asset/instances when total count is over 1000.
   
 -----------------------------------------------------------------------------------------------------------------------
 

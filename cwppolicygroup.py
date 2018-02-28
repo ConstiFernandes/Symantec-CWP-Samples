@@ -98,6 +98,6 @@ if __name__=="__main__":
   if (applyresult!=200) :
     print "\nApply polcy group failed \n"
   else:
-    print "\nPolicy group: '" + policygrouptoapply + "' applied on instance: '" + instanceid + "'."
+    print "\nPolicy group: '" + policygrouptoapply + "' applied on instance: '" + instanceid + "'." 
 
 

@@ -74,3 +74,9 @@ cwpgetevents.py
 Script to download CWP Alerts using CWP REST API. This script can be used to input data into splunk as script input
 
 -----------------------------------------------------------------------------------------------------------------------
+cwptandv.py
+Script to get a list of the potential threats and vulnerabilities that may impact your instances.
+Usages : python cwptandv.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <threats / vulnerabilities>
+Example :
+python cwptandv.py "xxxx" "xxxxx" "xxxxx" "xxxxx" "vulnerabilities"
+python cwptandv.py "xxxx" "xxxxx" "xxxxx" "xxxxx" "threats"

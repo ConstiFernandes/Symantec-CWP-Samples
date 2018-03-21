@@ -21,6 +21,9 @@ if __name__=="__main__":
   #CWP REST API endpoint URL for auth function
   url = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/oauth/tokens'
 
+  if len(sys.argv) != 6 :
+   print ("Please provide valid input parameters. For e.g. python cwptandv.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <threats / vulnerabilities>")
+   quit()
 
   threatorvuln = ""
   #Save CWP API keys here
@@ -29,10 +32,6 @@ if __name__=="__main__":
   clientID=sys.argv[3]
   clientsecret=sys.argv[4]
   gettandvUrl=""
-
-  if len(sys.argv) != 6 :
-   print ("Please provide valid input parameters. For e.g. python cwptandv.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <threats / vulnerabilities>")
-   quit()
 
   # Set API URL depending upon the input param
   if sys.argv[5] == "threats" :
@@ -44,7 +43,7 @@ if __name__=="__main__":
    quit()
 
   #Add to payload and header your CWP tenant & API keys - client_id, client_secret, x-epmp-customer-id and x-epmp-domain-id
-  payload = {'client_id' : clientID, 'client_secret' : clientsecret}
+  payload = {'client_id' : clientID, 'client_secret' : clientsecret, 'instances' : ['4492639654741810765']}
   header = {"Content-type": "application/json" ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
   response = requests.post(url, data=json.dumps(payload), headers=header)
   authresult=response.status_code
@@ -64,7 +63,8 @@ if __name__=="__main__":
   #print ("\nHeaders for Threat & Vulnerabilities API: " + str(headerforapi))
   apipayload=""
 
-  myfilepath = os.getcwd()+"\\filters.json"
+  myfilepath = os.getcwd()+"/filters.json"
+  print myfilepath
   if os.path.exists(myfilepath) and (os.path.getsize(myfilepath) > 0) :
     print("\n Filter file found at path : " + myfilepath)
     with open(myfilepath, 'r') as myfile :
@@ -74,6 +74,8 @@ if __name__=="__main__":
   else :
     apipayload= {}
     apipayload=json.dumps(apipayload)
+ 
+  print "apipayload  " +  apipayload 
   #Get threats and vulnerabilities details using filters provided in filters.json file. If this file not found or empty API will fetch all threas or vulnerabilities.
   gettnvResponse = requests.post(gettandvUrl, apipayload, headers=headerforapi)
   print(str(gettnvResponse))

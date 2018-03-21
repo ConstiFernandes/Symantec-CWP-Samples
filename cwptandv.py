@@ -64,7 +64,7 @@ if __name__=="__main__":
   apipayload=""
 
   myfilepath = os.getcwd()+"/filters.json"
-  print myfilepath
+  #print myfilepath
   if os.path.exists(myfilepath) and (os.path.getsize(myfilepath) > 0) :
     print("\n Filter file found at path : " + myfilepath)
     with open(myfilepath, 'r') as myfile :

@@ -4,11 +4,10 @@
 #
 #Script to get a list of the potential threats and vulnerabilities that may impact your instances.
 #Refer to CWP REST API at: https://apidocs.symantec.com/home/scwp#_symantec_cloud_workload_protection
-#Customer has to pass Customer ID, Domain ID, Client ID and Client Secret Key as arguments. The keys are available in CWP portal's Settings->API Key tab
-#Usage: python cwptandv.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <threats / vulnerabilities>
-#Same script can be used to fetch both threats and vulnerabilities depending upon parameter <threats / vulnerabilities>
-#Sample Usage: python cwptandv.py 'SEJHHHHHHA8YCxAg' 'DqdfTTTTTTTTTTB2w' 'O2ID.SEJxecAoTUUUUUUUUUUIITB2w.peu1ojqsrc3k4p69' 't6r4mUUUUUUUUUg2srjhc5q' 'threats'
-#You can provide input filters by creating filters.json file under same working directory where script is situated. If no filters.json is provided API will fetch all threats / vulnerabilities.
+#Customer has to pass Customer ID, Domain ID, Client ID and Client Secret Key and InstnanceID as arguments. The keys are available in CWP portal's Settings->API Key tab
+#Usage: python cwptandv.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <threats / vulnerabilities> <InstanceID>
+#Same script can be used to fetch both threats and vulnerabilities depending upon parameter <threats / vulnerabilities> <InstanceID>
+#Sample Usage: python cwptandv.py 'SEJHHHHHHA8YCxAg' 'DqdfTTTTTTTTTTB2w' 'O2ID.SEJxecAoTUUUUUUUUUUIITB2w.peu1ojqsrc3k4p69' 't6r4mUUUUUUUUUg2srjhc5q' 'threats' 'xxxxx'
 #####################################################################################################
 
 import os
@@ -21,9 +20,10 @@ if __name__=="__main__":
   #CWP REST API endpoint URL for auth function
   url = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/oauth/tokens'
 
-  if len(sys.argv) != 6 :
-   print ("Please provide valid input parameters. For e.g. python cwptandv.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <threats / vulnerabilities>")
-   quit()
+  t = len(sys.argv)
+  if len(sys.argv) != 7 :
+   print ("Please provide valid input parameters. For e.g. python cwptandv.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <threats / vulnerabilities> <InstanceID>")
+   sys.exit()
 
   threatorvuln = ""
   #Save CWP API keys here
@@ -32,6 +32,7 @@ if __name__=="__main__":
   clientID=sys.argv[3]
   clientsecret=sys.argv[4]
   gettandvUrl=""
+  instanceid = sys.argv[6]
 
   # Set API URL depending upon the input param
   if sys.argv[5] == "threats" :
@@ -39,10 +40,9 @@ if __name__=="__main__":
   elif sys.argv[5] == "vulnerabilities" :
    gettandvUrl = 'https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/vulnerabilities'
   else :
-   print ("Please provide valid input parameters. For e.g. python cwptandv.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <threats / vulnerabilities>")
-   quit()
-
-  #Add to payload and header your CWP tenant & API keys - client_id, client_secret, x-epmp-customer-id and x-epmp-domain-id
+   print ("\nPlease provide valid input parameters use option threats/vulnerabilities\n")
+   sys.exit()
+  #Add to payload and header your CWP tenant & API keys - client_id, client_secret, x-epmp-customer-id and x-epmp-domain-id IntanceID
   payload = {'client_id' : clientID, 'client_secret' : clientsecret, 'instances' : ['4492639654741810765']}
   header = {"Content-type": "application/json" ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
   response = requests.post(url, data=json.dumps(payload), headers=header)
@@ -50,32 +50,19 @@ if __name__=="__main__":
   token=response.json()
   if (authresult!=200) :
     print ("\nAuthentication Failed. Did you replace the API keys in the code with your CWP API Keys? Check clientsecret, clientID, customerID, and domainID\n")
-    exit()
+    sys.exit()
   else:
     print ("\nCWP API authentication successfull")
 
   #Extracting auth token
   accesstoken= token['access_token']
   accesstoken = "Bearer " + accesstoken
-  #print ("\nAccess Token: " + accesstoken)
 
   headerforapi = {"Content-type": "application/json","Authorization": accesstoken ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
-  #print ("\nHeaders for Threat & Vulnerabilities API: " + str(headerforapi))
-  apipayload=""
-
-  myfilepath = os.getcwd()+"/filters.json"
-  #print myfilepath
-  if os.path.exists(myfilepath) and (os.path.getsize(myfilepath) > 0) :
-    print("\n Filter file found at path : " + myfilepath)
-    with open(myfilepath, 'r') as myfile :
-          apipayload = myfile.read().replace('\n','')
-          print("Input Filter: "+ apipayload)
-
-  else :
-    apipayload= {}
-    apipayload=json.dumps(apipayload)
+  apipayload= {"instances" : [instanceid] }
+  apipayload=json.dumps(apipayload)
  
-  print "apipayload  " +  apipayload 
+  print ("apipayload  " +  apipayload)
   #Get threats and vulnerabilities details using filters provided in filters.json file. If this file not found or empty API will fetch all threas or vulnerabilities.
   gettnvResponse = requests.post(gettandvUrl, apipayload, headers=headerforapi)
   print(str(gettnvResponse))
@@ -84,7 +71,7 @@ if __name__=="__main__":
 
   if (tnvresult!=200) :
     print ("\nGet CWP threats and vulnerabilities API failed with error Code:" + str(tnvresult) + "\n")
-    exit()
+    sys.exit()
   else:
     print ("\nCWP "+sys.argv[5] +" API worked. Now printing API output")
 
@@ -95,7 +82,7 @@ if sys.argv[5] == "threats" :
       print("\nTitle :" + title)
       if(tnvresponseJson.get("threatList")[item].get("description") is not None):
         desc = tnvresponseJson.get("threatList")[item].get("description")
-        print("Description :" + desc)
+        print("Description :" + str(desc.encode('utf-8')))
       if(tnvresponseJson.get("threatList")[item].get("severity_level") is not None):
         severity = tnvresponseJson.get("threatList")[item].get("severity_level")
         print("Severity Level :" + severity)
@@ -116,7 +103,7 @@ if sys.argv[5] == "vulnerabilities" :
         print("\nTitle :" + title)
         if(tnvresponseJson.get("vulnerabilities")[item].get("description") is not None):
           desc = tnvresponseJson.get("vulnerabilities")[item].get("description")
-          print("Description :" + desc)
+          print("Description :" + str(desc.encode('utf-8')))
         if(tnvresponseJson.get("vulnerabilities")[item].get("cves") is not None):
           cves = tnvresponseJson.get("vulnerabilities")[item].get("cves")
           print("CVES :" + str(cves))

@@ -86,10 +86,13 @@ python cwptandv.py "xxxx" "xxxxx" "xxxxx" "xxxxx" "threats" "xxxxx"
 -----------------------------------------------------------------------------------------------------------------------
 cwp_agent_version.py
 Script to get available agent version for all/particular OS on CWP portal under download section
+
 Usage: 
+
 python cwp_agent_version.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> <platform>
 
 Example :
-python CheckAgentVersionAvlOnCWPServer.py xxxx xxxxx xxxxxx xxxxxx ubuntu14
-python CheckAgentVersionAvlOnCWPServer.py xxxx xxxxx xxxxxx xxxxxx all
-python CheckAgentVersionAvlOnCWPServer.py xxxx xxxxx xxxxxx xxxxxx windows
+
+python cwp_agent_version.py xxxx xxxxx xxxxxx xxxxxx ubuntu14
+python cwp_agent_version.py xxxx xxxxx xxxxxx xxxxxx all
+python cwp_agent_version.py xxxx xxxxx xxxxxx xxxxxx windows

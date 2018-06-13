@@ -96,3 +96,25 @@ Example :
 python cwp_agent_version.py xxxx xxxxx xxxxxx xxxxxx ubuntu14
 python cwp_agent_version.py xxxx xxxxx xxxxxx xxxxxx all
 python cwp_agent_version.py xxxx xxxxx xxxxxx xxxxxx windows
+
+
+-----------------------------------------------------------------------------------------------------------------------
+cwp_aws_connection_get_create.py
+Script to automate list down AWS connection availabe for the customer and also can create connection for customer.
+Usage: 
+python cwp_aws_connection_get_create.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key>
+
+Example :
+python cwp_aws_connection_get_create.py xxx xxxxx xxxx xxxxx
+
+-----------------------------------------------------------------------------------------------------------------------
+cwp_aws_connection_update.py
+Script to automate updation of created connection with arn
+Usage:
+python cwp_aws_connection_update.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key>
+
+Example :
+python cwp_aws_connection_update.py xxxxx xxxxx xxxxx xxxxxx
+
+
+

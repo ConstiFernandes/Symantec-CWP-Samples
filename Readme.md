@@ -109,7 +109,7 @@ python cwp_aws_connection_get_create.py xxx xxxxx xxxx xxxxx
 
 -----------------------------------------------------------------------------------------------------------------------
 cwp_aws_connection_update.py
-Script to automate updation of created connection with arn
+Script to automate updation of created connection with arn. User need to create a file "updateconn.ini" and update entries regarding AWS's details that user will mention while creating arn. Sample attached with name of "updateconn.ini" 
 Usage:
 python cwp_aws_connection_update.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key>
 

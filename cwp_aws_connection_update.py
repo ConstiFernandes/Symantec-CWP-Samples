@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#
+# 
 # Copyright 2018 Symantec Corporation. All rights reserved.
 #
 #Script to automate updation of created connection with arn
@@ -34,7 +34,7 @@ def updateconnection():
   #Add to payload and header your CWP tenant & API keys - client_id, client_secret, x-epmp-customer-id and x-epmp-domain-id
   payload = {'client_id' : clientID, 'client_secret' : clientsecret}
   header = {"Content-type": "application/json" ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
-  response = requests.post(url, data=json.dumps(payload), headers=header) 
+  response = requests.post(url, data=json.dumps(payload), headers=header)
   authresult=response.status_code
   token=response.json()
   if (authresult!=200) :
@@ -45,40 +45,46 @@ def updateconnection():
   accesstoken = "Bearer " + accesstoken
   #CWP REST API URL to update connection
   urlupdateonn = urlmain + '/cpif/cloud_connections'
-  headertocheckconn = "Authorization": accesstoken ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID , "Content-Type": "application/json"}
+  headertocheckconn = {"Authorization": accesstoken ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID , "Content-Type": "application/json"}
   my_dict = {}
   #Reading payload from  updateconn.ini file
   with open("updateconn.ini", 'r') as f:
     for line in f:
       items = line.split('=')
       key, values = items[0], items[1]
-      my_dict[key] = values
+      my_dict[key] = values.rstrip()
+  #print (my_dict)
 
+  clould_platform = my_dict['clould_platform']
+  connection_name = my_dict['name']
   external_id = my_dict['external_id']
   id1= my_dict['id']
   pollingIntervalHours = my_dict['pollingIntervalHours']
   pollingIntervalMinutes = my_dict['pollingIntervalMinutes']
+  cross_account_role_arn = my_dict['cross_account_role_arn']
   requires_polling = my_dict['requires_polling']
   f.close()
   payload={}
-  payload['cloud_platform'] = clould_platform.strip)
-  payload['name'] = connection_name.strip)
-  payload['external_id'] = external_id.strip)
-  payload['id']=id1.strip)
-  payload['pollingIntervalHours'] = pollingIntervalHours.strip)
-  payload['pollingIntervalMinutes'] = pollingIntervalMinutes.strip)
-  payload['cross_account_role_arn'] = cross_account_role_arn.strip)
-  payload['requires_polling'] = requires_polling.strip)
+  payload['cloud_platform'] = clould_platform
+  payload['name'] = connection_name
+  payload['external_id'] = external_id
+  payload['id']=id1
+  payload['pollingIntervalHours'] = pollingIntervalHours
+  payload['pollingIntervalMinutes'] = pollingIntervalMinutes
+  payload['cross_account_role_arn'] = cross_account_role_arn
+  payload['requires_polling'] = requires_polling
 
-  #print my_dict
-  #print pollingIntervalHours , pollingIntervalMinutes , external_id, id1, pollingIntervalHours, requires_polling
+  #print (pollingIntervalHours , pollingIntervalMinutes , external_id, id1, pollingIntervalHours, requires_polling)
+
+  print (payload)
   response = requests.put(urlupdateonn, data= json.dumps(payload), headers=headertocheckconn)
   if response.status_code != 200:
-        print ("supported-update conn  API call failed \n")
+        print ("Update Connection  API call failed with:")
+        print (response)
         exit()
   output = {}
   output = response.json()
-  print output
+  print (output)
 
 if __name__=="__main__":
 

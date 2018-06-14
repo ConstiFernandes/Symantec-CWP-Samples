@@ -73,18 +73,31 @@ def updateconnection():
   payload['pollingIntervalMinutes'] = pollingIntervalMinutes
   payload['cross_account_role_arn'] = cross_account_role_arn
   payload['requires_polling'] = requires_polling
+  
+  print(requires_polling)
+  if requires_polling == 'true': 
+        #print("Polling")
+        payload['events_url'] = []
+  else:
+        #print("CloudTrail")
+        sqs_queue_name = my_dict['sqs_queue_name']
+        sqs_queue_url = my_dict['sqs_queue_url']
+        payload['events_url'] = [{'name': sqs_queue_name, 'url': sqs_queue_url}]
 
-  #print (pollingIntervalHours , pollingIntervalMinutes , external_id, id1, pollingIntervalHours, requires_polling)
+  print ("Payload: " + str(payload) + "\n\n")
+  try:
+        response = requests.put(urlupdateonn, data= json.dumps(payload), headers=headertocheckconn)
+        response.raise_for_status()
+        print ("Successfully updated the connection.\n")
+  except requests.exceptions.RequestException as err:
+    print ("Error Message:", err.response.json())
+  except requests.exceptions.HTTPError as errh:
+    print ("Http Error Message:", errh.response.json())
+  except requests.exceptions.ConnectionError as errc:
+    print ("Error Connecting:", errc)
+  except requests.exceptions.Timeout as errt:
+    print ("Timeout Error:", errt)  
 
-  print (payload)
-  response = requests.put(urlupdateonn, data= json.dumps(payload), headers=headertocheckconn)
-  if response.status_code != 200:
-        print ("Update Connection  API call failed with:")
-        print (response)
-        exit()
-  output = {}
-  output = response.json()
-  print (output)
 
 if __name__=="__main__":
 
@@ -97,4 +110,3 @@ if __name__=="__main__":
    clientID=sys.argv[3]
    clientsecret=sys.argv[4]
    updateconnection()
-   

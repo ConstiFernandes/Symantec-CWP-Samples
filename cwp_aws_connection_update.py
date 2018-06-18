@@ -6,7 +6,19 @@
 #Refer to CWP REST API at: https://apidocs.symantec.com/home/scwp#_symantec_cloud_workload_protection
 #Customer has to pass Customer ID, Domain ID, Client ID and Client Secret Key as arguments. The keys are available in CWP portal's Settings->API Key tab
 #Usage: python cwp_aws_connection_update.py <Customer ID> <Domain ID> <Client Id> <Client Secret Key> "
-#To update exisitng connection, user will have to update updateconn.ini as per need
+#To update existing connection, user will have to update updateconn.ini with external ID, Connection ID, Sync optiopn (polling true for polling or false for CloudTrail),
+# Role ARN, SQS URL and SQS queue name and polling interval.
+#E.g.
+#clould_platform=AWS
+#name=AWS Demo
+#external_id=AO8xUWGe
+#id=iTT4-3gLQWCCMeWzwA
+#pollingIntervalHours=0
+#pollingIntervalMinutes=15
+#cross_account_role_arn=arn:aws:iam::782560330:role/CWPConnectionStack-role
+#requires_polling=true
+#sqs_queue_name=SCWPSQSQueue1
+#sqs_queue_url=https://sqs.us-west-2.amazonaws.com/143926267875/SCWPSQSQueue1
 #######################################################################################################################################################################
 
 import platform

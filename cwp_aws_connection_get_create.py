@@ -74,10 +74,9 @@ def createconnection():
   accesstoken= token['access_token']
   accesstoken = "Bearer " + accesstoken
   createurl = "https://scwp.securitycloud.symantec.com/dcs-service/dcscloud/v1/cpif/cloud_connections"
-  createpayload = {'client_id' : clientID, 'client_secret' : clientsecret}
   createheader = {"Authorization": accesstoken ,"Content-type": "application/json" ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
   header1 = {"Content-type": "application/json","Authorization": accesstoken ,'x-epmp-customer-id' : customerID , 'x-epmp-domain-id' : domainID}
-  createresponse = requests.post(createurl, data=json.dumps(createpayload), headers=header1)
+  createresponse = requests.post(createurl, data='', headers=header1)
   mydict = createresponse.json()
   print (mydict)
   print ("\n External_ID : " + mydict[u'external_id'])
@@ -95,4 +94,3 @@ if __name__=="__main__":
    clientsecret=sys.argv[4]
    getconnection()
    createconnection()
-   

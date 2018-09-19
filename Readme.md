@@ -1,3 +1,6 @@
+Please note that the new official location of this GitHub is https://github.com/Symantec/cwp-powershell-samples
+----------------------------------------------------------------------------------------------------------------
+
 Sample code projects for building security applications using Symantec Cloud Workload Protection REST API
 
 Refer to Symantec CWP API documentation at: https://apidocs.symantec.com/home/scwp#_events_service
